@@ -1,0 +1,217 @@
+Roteiro de aula
+
+###############################################
+Aula 1 - Criando lista - TodoActivity
+package: todo.exemplo
+###############################################
+
+- Activity Java
+- Activity XML
+	- Alterar para LinearLayout
+	- implementation 'com.android.support:appcompat-v7:27.1.1'
+	- Widget RecyclerView
+- Alterar AndroidManifest para TodoActivity
+
+- Adapter
+	- Adapter para RecyclerView (apenas a classe)
+	- Inner class RecyclerViewHolder
+	- extends RecyclerView.Adapter<TodoAdapter.RecyclerViewHolder> na classe TodoAdapter
+	- row.xml (add id para o TextView)
+	- Objeto Tarefa
+	- Voltando para o Adapter
+	    - Construtor com Context e Lista
+		- onCreateViewHolder
+		- RecyclerViewHolder
+		- onBindViewHolder
+- Activity Java
+    - Finalizar ligando Adapter na RecyclerView
+
+
+###############################################
+Aula 2- Criando add - TodoActivity, activity_todo.xml
+package: todo.exemplo
+###############################################
+- Activity XML
+	- FloatingActionButton (FAB):
+		- Alterar para RelativeLayout
+    	- Baixar icon: plus -> flaticon.com
+    	- Add FloatingActionButton
+    	- Add no gradle do app: android -> defaultConfig -> vectorDrawables.useSupportLibrary = true
+    	- Add id
+- Activity Java
+	- Métodos getElements e getActions
+	- Add action FAB
+    - Toast click FAB
+	- addDialog:  Dialog para add a tarefa.
+		- Add nova tarefa na lista.
+			- Lista e Adapter como variavel global
+			- Dentro do Salvar do Dialog:
+			  	- list.add(new Tarefa(etTarefa.getText().toString()));
+			  	- Criar método notifyDataSetChanged
+			  	- ** A lista é atualizada por referencia.
+
+- Adicionando click na lista
+	- Add id LinearLayout principal (row.xml)
+	- Recuperar no Adapter o id da row.
+	- Add onClick na row
+		- Converter o context na activity e criar o metodo de click na activity e add  um Toast.
+	** Tarefa para a turma: Remover o item da lista.
+		- Fazer remover apenas clicando no item, depois vamos evoluindo.
+		- Sobreescrever equals Tarefa.java
+		- E chamar:
+		 	list.remove(item); //usa o equals
+        	notifyDataSetChanged();
+
+
+###############################################
+Aula 3- Melhorando Lista, Botao Remove, sharedPreferences
+package: todo.exemplo
+###############################################
+-row.xml
+    - IconFinder: trash
+	- Add LinearLayout e ImageView (Usei AppCompat devido a versão).
+	- Mostrar que a imagem nao aparece, devido:
+		- o segundo LinearLayout está como match_parent,
+		assim joga o terceiro para fora da tela.
+		- Adicionando o android:layout_weight="" 
+			- (menor o numero, maior prioridade)
+		- Add android:layout_weight="0" no terceiro, logo esta com maior prioridade, mas sobre quem?
+		- Add no segundo android:layout_weight="1"
+		- Melhor margin e padding do LinearLayout principal
+	** Turma:
+		Remover via lixeira, apresentar mensagem de confirmação.
+		- Add id na ImageView
+		- Recuperar no adapter
+		- Chamar o remover (renomear para onRemove)
+		- Criar o dialog.
+	Editar item:
+		- Add click na row, dentro do apdater
+		- Criar metodo onEdit na TodoActivity
+		- Atualizar o item por referencia.
+
+###############################################
+Aula 4- Corrigir atividade e tela de Login
+package: login.exemplo
+###############################################
+	- Fazer o remove e editar com a turma.
+	- Tela de login
+		Criar LoginActivity
+		Criar activity_login.xml
+		 - activity_login.xml
+		 	Utilizar material designer (cuidar com os imports, 
+		 	talvez usa outro para os widgets)
+		 	- Login e Senha
+		 	- Usar strings
+		 	- Imagem - flaticon: app
+		 	- Ajustar padding, margin.
+		 - Alterar styles.xml
+		 	- Theme.AppCompat.Light.NoActionBar (remover toolbar)
+		 - LoginActivity
+		 	- Recuperar botao e chamar outra TodoActivity
+		Criar classe LoginUtil (sharedPreferences)
+		 - LoginActivity
+		 	- metodo init (recupera do shared o ultimo usuario)
+		 	- recuperar login e senha
+		 	- fazer logica de login
+		 	- gravar no shared
+		 	- Testar.
+		 	- Remover tela de login, se estiver salvo o login. (deixei comentado)
+
+###############################################
+Aula 5- Add Toolbar e Icone na Toolbar
+package: todo.exemplo
+###############################################
+- Criar toolbar.xml
+- Add include toolbar - activity_todo.xml
+- Add titulo toolbar - TodoActivity.java
+  		Toolbar toolbar = findViewById(R.id.iToolbar);
+        toolbar.setTitle("Lista");
+- Criar toolbar menu
+	- Criar pasta menu
+	- Criar menu.xml
+	- Baixar icone logout
+    - TodoActivity
+    	@Override
+		public boolean onCreateOptionsMenu(Menu menu) {
+		    getMenuInflater().inflate(R.menu.menu, menu);
+		    return true;
+		}
+		- Testar, não vai aparecer. Falta o  setSupportActionBar(toolbar); no método onCreate.
+
+		- Add click no menu
+		 @Override
+	     public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+	            case R.id.logout:
+	                Toast.makeText(getApplicationContext(), "Sair", Toast.LENGTH_SHORT).show();
+	                return true;
+	            default:
+	                return super.onOptionsItemSelected(item);
+	        }
+	     }
+	     - LoginUtil
+	     	- Criar metodo remover pref.
+	     - onOptionsItemSelected
+	     	- Limpar activities
+	     	- Limpar Shared.
+
+###############################################
+Aula 6- Retrofit
+package: retrofit.exemplo
+###############################################
+Adicionar dependencias:
+	- implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+	- implementation "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
+	- implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+
+- Criar classe RetrofitUtil
+- Criar GitRepositoriesActivity + xml (https://medium.com/@nglauber/android-utilizando-layout-weight-10b1c4bc8ad8)
+- Criar Service Retrofit
+	- IGitService
+
+- Alterar AndroidManifest
+	- Activity GitRepositoriesActivity como principal
+	- <uses-permission android:name="android.permission.INTERNET" />
+
+- Implementar a busca e listagem.
+
+- Implementar campo de texto com a busca dinâmica
+	- Add EditText
+	- Add ImageView + IconFinder
+	- Alinhamentos EditText e ImageView
+
+- Add ProgressDialog...
+    - dismiss (Sucesso ou Erro)
+    - hideKeyboard
+
+
+###############################################
+Aula 6- SQLite
+package: sqlite.pesquisaeleitoral.exemplo
+###############################################
+- App base desenvolvida - pesquisa eleitoral;
+
+    - Enum Categoria (Presidente, Governador)
+    - SQLite
+        - Tabela Candidato (nome do candidato, partido, Categoria)
+
+    - Atividade:
+        - Remover Enum Categoria e gravar no SQLite;
+        - Implementar a gravação do voto no SQLite;
+        - Implementar o Resultado (deve buscar os dados dos votos gravados no SQLite);
+            - O Resultado pode ser na mesma detela da Categoria ou em uma nova tela clicando no botão Resultado;
+        - Adicionar mais 3 categorias com candidatos vinculados;
+        - Login com pelo menos 2 usuários no SQLite;
+
+
+
+
+
+
+
+
+
+
+
+
+

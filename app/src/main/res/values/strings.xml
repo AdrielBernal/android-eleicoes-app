@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Aula mobile</string>
+    <string name="login">Login</string>
+    <string name="senha">Senha</string>
+    <string name="entrar">Entrar</string>
+
+    <string name="sql_create_tables">
+         CREATE TABLE candidato	(
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                nome VARCHAR(100) NOT NULL,
+                partido VARCHAR(100) NOT NULL,
+                idCategoria INT NOT NULL,
+                votos INT NOT NULL
+        )
+	</string>
+
+</resources>
