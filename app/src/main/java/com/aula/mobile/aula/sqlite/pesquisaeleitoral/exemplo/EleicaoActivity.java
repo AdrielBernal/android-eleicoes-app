@@ -24,7 +24,7 @@ public class EleicaoActivity extends AppCompatActivity {
 
         /*********BANCO DE DADOS**************/
         CandidatoHelper candidatoHelper = new CandidatoHelper(this);
-        if (candidatoHelper.count() == 0)
+        if (candidatoHelper.countCandidatos() == 0)
             candidatoHelper.add();
         /***********************/
 

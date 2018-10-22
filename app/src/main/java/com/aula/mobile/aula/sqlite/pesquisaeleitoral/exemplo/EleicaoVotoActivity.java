@@ -55,8 +55,9 @@ public class EleicaoVotoActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 item.setVotos(item.getVotos() + 1);
-                                Toast.makeText(getApplicationContext(), "votos = " + item.getVotos(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "votos = " + candidatoHelper.countCategoria(), Toast.LENGTH_SHORT).show();
                                 candidatoHelper.addVoto(item);
+
                             }
 
                         })

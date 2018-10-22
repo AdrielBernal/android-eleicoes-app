@@ -20,11 +20,13 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(mContext.getString(R.string.sql_create_tables));
+        db.execSQL(mContext.getString(R.string.sql_create_table_candidato));
+        db.execSQL(mContext.getString(R.string.sql_create_table_categoria));
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-         onUpgrade(db, oldVersion, newVersion);
+        onUpgrade(db, oldVersion, newVersion);
     }
 }

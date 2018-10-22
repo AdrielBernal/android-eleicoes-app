@@ -11,6 +11,7 @@ public class CandidatoHelper {
 
     private DbHelper dbHelper;
     public static final String TABLE_CANDIDATO = "candidato";
+    public static final String TABLE_CATEGORIA = "categoria";
 
     public CandidatoHelper(Context context) {
         dbHelper = new DbHelper(context);
@@ -59,11 +60,20 @@ public class CandidatoHelper {
         dbHelper.getWritableDatabase().update(TABLE_CANDIDATO, values, "id=" + item.getId(), null);
     }
 
-    public int count() {
+    public int countCandidatos() {
         Cursor mCount = dbHelper.getReadableDatabase()
                 .rawQuery("select count(*) from " + TABLE_CANDIDATO, null);
         mCount.moveToFirst();
         int count = mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
+    public final int countCategoria() {
+        Cursor mCount = dbHelper.getReadableDatabase()
+                .rawQuery("select count(*) from " + TABLE_CATEGORIA, null);
+        mCount.moveToFirst();
+        final int count = mCount.getInt(0);
         mCount.close();
         return count;
     }
