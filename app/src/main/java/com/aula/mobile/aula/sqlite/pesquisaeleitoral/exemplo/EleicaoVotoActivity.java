@@ -31,11 +31,11 @@ public class EleicaoVotoActivity extends AppCompatActivity {
         tvText = findViewById(R.id.tvText);
 
         int idCategoria = this.getIntent().getIntExtra("id", 0);
-        ECategoria eCategoria = ECategoria.getById(idCategoria);
-        tvText.setText("Pesquisa para: " + eCategoria.getNome() + " - " + eCategoria.getEstado());
-
-
         final CandidatoHelper candidatoHelper = new CandidatoHelper(this);
+        Categoria eCategoria = candidatoHelper.getCategoriaById(idCategoria);
+        tvText.setText("Pesquisa para: " + eCategoria.getDescricao() + " - " + eCategoria.getEstado());
+
+
         List<Candidato> candidatos = candidatoHelper.getList(eCategoria.getId());
 
         ArrayAdapter<Candidato> adapter = new ArrayAdapter(this,
@@ -55,7 +55,7 @@ public class EleicaoVotoActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 item.setVotos(item.getVotos() + 1);
-                                Toast.makeText(getApplicationContext(), "votos = " + candidatoHelper.countCategoria(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Voto computado com sucesso ", Toast.LENGTH_SHORT).show();
                                 candidatoHelper.addVoto(item);
 
                             }

@@ -34,15 +34,44 @@ public class CandidatoHelper {
         return list;
     }
 
+    public List<Categoria> getListCategoria() {
+        List<Categoria> list = new ArrayList<>(0);
+        Cursor cursor = dbHelper.getReadableDatabase()
+                .rawQuery("SELECT * FROM categoria ", null);
+        if (cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                int ID = cursor.getInt(cursor.getColumnIndex("id"));
+                String descricao = cursor.getString(cursor.getColumnIndex("descricao"));
+                String estado = cursor.getString(cursor.getColumnIndex("estado"));
+                list.add(new Categoria(ID, descricao, estado));
+                cursor.moveToNext();
+            }
+        }
+        return list;
+    }
+
     public void add() {
-        insertCandidato("Jair Bolsonaro", "PSL", ECategoria.PRESIDENTE.getId(), 0);
-        insertCandidato("Fernando Haddad", "PT", ECategoria.PRESIDENTE.getId(), 0);
-        insertCandidato("Ciro Gomes", "PDT", ECategoria.PRESIDENTE.getId(), 0);
-        insertCandidato("Geraldo Alckmin", "PSBD", ECategoria.PRESIDENTE.getId(), 0);
+        insertCandidato("Jair Bolsonaro", "PSL", 1, 0);
+        insertCandidato("Fernando Haddad", "PT", 1, 0);
+        insertCandidato("Ciro Gomes", "PDT", 1, 0);
+        insertCandidato("Geraldo Alckmin", "PSBD", 1, 0);
         //
-        insertCandidato("Ratinho JR", "PSD", ECategoria.GOVERNADOR_PR.getId(), 0);
-        insertCandidato("Cida", "PP", ECategoria.GOVERNADOR_PR.getId(), 0);
-        insertCandidato("João Arruda", "MDB", ECategoria.GOVERNADOR_PR.getId(), 0);
+        insertCandidato("Ratinho JR", "PSD", 3, 0);
+        insertCandidato("Cida", "PP", 3, 0);
+        insertCandidato("João Arruda", "MDB", 3, 0);
+    }
+
+    public void addCategoria() {
+        insertCategoria("Presidente", "BR");
+        insertCategoria("Governador", "SP");
+        insertCategoria("Governador", "PR");
+    }
+
+    private void insertCategoria(String descricao, String estado) {
+        ContentValues values = new ContentValues();
+        values.put("descricao", descricao);
+        values.put("estado", estado);
+        dbHelper.getWritableDatabase().insert(TABLE_CATEGORIA, null, values);
     }
 
     private void insertCandidato(String nome, String partido, int idCategoria, int votos) {
@@ -76,5 +105,14 @@ public class CandidatoHelper {
         final int count = mCount.getInt(0);
         mCount.close();
         return count;
+    }
+
+    public Categoria getCategoriaById(int id) {
+        for (Categoria c : getListCategoria()) {
+            if (c.getId() == id) {
+                return c;
+            }
+        }
+        return null;
     }
 }

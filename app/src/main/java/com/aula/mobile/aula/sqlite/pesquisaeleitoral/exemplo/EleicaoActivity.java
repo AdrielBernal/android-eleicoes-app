@@ -23,7 +23,10 @@ public class EleicaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_eleicao);
 
         /*********BANCO DE DADOS**************/
-        CandidatoHelper candidatoHelper = new CandidatoHelper(this);
+        final CandidatoHelper candidatoHelper = new CandidatoHelper(this);
+        if (candidatoHelper.countCategoria() == 0) {
+            candidatoHelper.addCategoria();
+        }
         if (candidatoHelper.countCandidatos() == 0)
             candidatoHelper.add();
         /***********************/
@@ -33,12 +36,7 @@ public class EleicaoActivity extends AppCompatActivity {
         Button btResultado = findViewById(R.id.btResultado);
 
         List<Categoria> categorias = new ArrayList<>();
-        ECategoria[] eCategorias = ECategoria.values();
-        for (int i = 0; i < eCategorias.length; i++) {
-            ECategoria eCategoria = eCategorias[i];
-            categorias.add(new Categoria(eCategoria.getId(), eCategoria.getNome(), eCategoria.getEstado()));
-        }
-
+        categorias = candidatoHelper.getListCategoria();
         configureSpinner(spCategoria, categorias);
 
         btIniciar.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +52,13 @@ public class EleicaoActivity extends AppCompatActivity {
         btResultado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Implementar", Toast.LENGTH_SHORT).show();
+                Categoria categoria = (Categoria) spCategoria.getSelectedItem();
+                List<Candidato> list = candidatoHelper.getList(categoria.getId());
+                String resultado = "Resultados \n";
+                for (Candidato c : list) {
+                    resultado = resultado.concat(c.getNome() + "-" + c.getPartido() + "Votos= " + c.getVotos() + "\n");
+                }
+                Toast.makeText(getApplicationContext(), resultado, Toast.LENGTH_SHORT).show();
             }
         });
     }
